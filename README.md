@@ -1,1 +1,2 @@
-# Machine110624Frontend
+# MachineModule
+MachineModule(Magod Machine Module)
