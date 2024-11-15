@@ -27,6 +27,7 @@ import { GiLaserPrecision } from "react-icons/gi";
 import { HiCubeTransparent } from "react-icons/hi";
 import { AiFillSchedule } from "react-icons/ai";
 
+const previousMenuUrl = process.env.REACT_APP_PREVIOUS_MENU_URL;
 export const customerSidebar = [
   {
     title: "Shift Operation",
@@ -52,8 +53,7 @@ export const customerSidebar = [
   {
     title: "Previous Menu",
     // path: "http://172.16.20.61:3000/home",
-    path: "http://192.168.1.25:3000/home",
-    // path: "http://192.168.1.25:9000/home",
+    path: previousMenuUrl,
     icon: <MdIcon.MdPreview />,
     iconClosed: <RiIcons.RiArrowDownSFill />,
     iconOpened: <RiIcons.RiArrowUpSFill />,
