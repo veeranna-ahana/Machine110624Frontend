@@ -1,3 +1,5 @@
+/** @format */
+
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { Link, useLocation } from "react-router-dom";
@@ -31,7 +33,6 @@ const SidebarComp = () => {
   const [newSideBarData, setNewSideBarData] = useState(customerSidebar);
   const [accessSideBarData, setAccessSideBarData] = useState([]);
 
-
   let [lazerUser, setLazerUser] = useState(
     JSON.parse(localStorage.getItem("LazerUser"))
   );
@@ -46,41 +47,91 @@ const SidebarComp = () => {
 
   //access information is present in laser user
   //modify the array in newSideBarData based on laserUserdata
+  // useEffect(() => {
+  // 	const tempArray = [...accessSideBarData]; //creating a copy of the accessSideBar
+
+  // 	function filterSidebarData(data, accessPaths) {
+  // 		const result1 = [];
+
+  // 		//  console.log(data)
+
+  // 		data.forEach((element) => {
+  // 			// console.log(element)
+  // 			if (element.subNav) {
+  // 				// console.log(element.subNav)
+  // 				const subNavFiltered = filterSidebarData(element.subNav, accessPaths);
+
+  // 				element.subNav = subNavFiltered;
+  // 				// console.log(subNavFiltered)
+  // 				if (subNavFiltered.length > 0 || accessPaths.includes(element.path)) {
+  // 					// console.log(element, 'existtttttttttttttttttttttttttttttttttt')
+  // 					result1.push(element);
+  // 				}
+  // 			} else {
+  // 				if (accessPaths.includes(element.path)) {
+  // 					result1.push(element);
+  // 				}
+  // 			}
+  // 		});
+
+  // 		return result1;
+  // 	}
+
+  // 	const result1 = filterSidebarData(newSideBarData, lazerUser.data.access);
+  // 	setAccessSideBarData(result1);
+  // 	// setAccessSideBarData(tempArray);
+  // }, []);
   useEffect(() => {
-    const tempArray = [...accessSideBarData]; //creating a copy of the accessSideBar
-
     function filterSidebarData(data, accessPaths) {
-      const result1 = [];
-
-      //  console.log(data)
+      console.log("first", data);
+      console.log("second", accessPaths);
+      const filterSidebar = [];
+      let previousMenu = null;
 
       data.forEach((element) => {
-        // console.log(element)
         if (element.subNav) {
-          // console.log(element.subNav)
           const subNavFiltered = filterSidebarData(element.subNav, accessPaths);
-
           element.subNav = subNavFiltered;
-          // console.log(subNavFiltered)
-          if (subNavFiltered.length > 0 || accessPaths.includes(element.path)) {
-            // console.log(element, 'existtttttttttttttttttttttttttttttttttt')
-            result1.push(element);
+          if (
+            subNavFiltered.length > 0 ||
+            accessPaths?.includes(element.path)
+          ) {
+            // if(element.path)
+            //   element.path = element.path.toLowerCase();
+
+            filterSidebar.push(element);
           }
         } else {
-          if (accessPaths.includes(element.path)) {
-            result1.push(element);
+          if (element.title === "Previous Menu") {
+            previousMenu = element;
+          } else if (accessPaths?.includes(element.path)) {
+            console.log("element.path", element.path);
+            // if(element.path)
+            //   element.path = element.path.toLowerCase();
+            filterSidebar.push(element);
           }
         }
       });
-
-      return result1;
+      if (previousMenu) {
+        filterSidebar.push(previousMenu);
+      }
+      return filterSidebar;
     }
 
-    const result1 = filterSidebarData(newSideBarData, lazerUser.data.access);
-    setAccessSideBarData(result1);
-    // setAccessSideBarData(tempArray);
+    const filterSidebar = filterSidebarData(
+      newSideBarData,
+      lazerUser?.data?.access
+    );
+    console.log("filter", filterSidebar);
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////
+    setAccessSideBarData(filterSidebar);
+    // setAccessSideBarData(quotationSidebar)
   }, []);
-  
+  useEffect(() => {
+    console.log(lazerUser?.data?.access);
+  }, []);
+
+  console.log("access", accessSideBarData);
   return (
     <>
       <nav className={sidebar ? "side-nav" : '"side-nav '}>

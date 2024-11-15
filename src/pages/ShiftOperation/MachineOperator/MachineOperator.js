@@ -17,7 +17,11 @@ export default function MachineOperator() {
     setShiftSelected,
     setServiceTopData,
     setNcProgramId,
-    setShowTable,setSelectedProgram,setMachinetaskdata,machineShiftStatus, setMachineShiftStatus
+    setShowTable,
+    setSelectedProgram,
+    setMachinetaskdata,
+    machineShiftStatus,
+    setMachineShiftStatus,
   } = useGlobalContext();
 
   //get Machine List
@@ -33,6 +37,17 @@ export default function MachineOperator() {
     getMachineList();
   }, []);
 
+  // const [ShiftInformation, setShiftInformation] = useState([]);
+  // useEffect(() => {
+  //   axios
+  //     .post(baseURL + "/ShiftOperator/getCurrentShiftDetails", {})
+  //     .then((response) => {
+  //       console.log("response is", response);
+  //       setShiftInformation(response.data);
+  //     });
+  // }, []);
+
+  // console.log("ShiftInformation is", ShiftInformation);
 
   const moment = require("moment");
   const today = moment();
@@ -90,7 +105,6 @@ export default function MachineOperator() {
   useMemo(() => {
     setSelectshifttable({ ...shiftDetails[0], index: 0 });
   }, [shiftDetails[0]]);
-
 
   const data = {
     selectedMachine: selectedMachine || "",
@@ -152,19 +166,18 @@ export default function MachineOperator() {
   //     });
   // };
 
-    ////
-    const countUserDefinedProperties = (obj) => {
-      let count = 0;
-      for (let key in obj) {
-        if (obj.hasOwnProperty(key) && key !== "index") {
-          count++;
-        }
+  ////
+  const countUserDefinedProperties = (obj) => {
+    let count = 0;
+    for (let key in obj) {
+      if (obj.hasOwnProperty(key) && key !== "index") {
+        count++;
       }
-      return count;
-    };
-  
-    const numberOfProperties = countUserDefinedProperties(selectshifttable);
+    }
+    return count;
+  };
 
+  const numberOfProperties = countUserDefinedProperties(selectshifttable);
 
   //openShiftLog Button
   const openShiftLogModal = () => {
@@ -174,7 +187,7 @@ export default function MachineOperator() {
       })
       .then((response) => {
         setRequiredProgram(response.data);
-        if (response.data.length!==0 && numberOfProperties!==0) {
+        if (response.data.length !== 0 && numberOfProperties !== 0) {
           // //ProcessTaskStatus
           // axios
           //   .post(baseURL + "/ShiftOperator/ProcessTaskStatus", {
@@ -188,25 +201,26 @@ export default function MachineOperator() {
           serviceMiddleTableData();
           getmiddleTbaleData();
           axios
-          .post(baseURL + "/ShiftOperator/getTableTopDeatailsAfterPageRefresh", {
-            selectshifttable,
-          })
-          .then((response) => {
-            setServiceTopData(response.data);
-          });
-        }
-        else if(response.data.length===0 && numberOfProperties===0){
+            .post(
+              baseURL + "/ShiftOperator/getTableTopDeatailsAfterPageRefresh",
+              {
+                selectshifttable,
+              }
+            )
+            .then((response) => {
+              setServiceTopData(response.data);
+            });
+        } else if (response.data.length === 0 && numberOfProperties === 0) {
           setOpenmodal(true);
           setShiftSelected(selectshifttable);
           serviceMiddleTableData();
           getmiddleTbaleData();
-        }
-         else {
+        } else {
           navigate("OpenShiftLog", { state: { data } });
         }
       });
-      setSelectedProgram({});
-      axios
+    setSelectedProgram({});
+    axios
       .post(baseURL + "/ShiftOperator/MachineTasksData", {
         MachineName: selectshifttable?.Machine,
       })
@@ -231,7 +245,7 @@ export default function MachineOperator() {
       .catch((error) => {
         console.error("Error occurred:", error);
       });
-      axios
+    axios
       .post(baseURL + "/ShiftOperator/getmachineShiftStatus", {
         selectshifttable,
       })
@@ -249,12 +263,12 @@ export default function MachineOperator() {
     getmiddleTbaleData();
     serviceMiddleTableData();
     axios
-    .post(baseURL + "/ShiftOperator/getmachineShiftStatus", {
-      selectshifttable,
-    })
-    .then((response) => {
-      setMachineShiftStatus(response.data);
-    });
+      .post(baseURL + "/ShiftOperator/getmachineShiftStatus", {
+        selectshifttable,
+      })
+      .then((response) => {
+        setMachineShiftStatus(response.data);
+      });
   }, []);
 
   //update Machine Time
@@ -270,32 +284,46 @@ export default function MachineOperator() {
     updateMachineTime();
   }, [selectshifttable]);
 
-  //FromTime
-  const FT = selectshifttable?.FromTime?.split(' ') || [];
-  const FromTime = FT[1] !== undefined ? FT[1] : 
-                   Shift === "First" ? "6:00:00" : 
-                   Shift === "Second" ? "14:00:00" : 
-                   Shift === "Third" ? "22:00:00" : "";
-
-  const FD=FT[0]?.split('-') || [];
-  const FD1=FD[2] + "/" + FD[1] + "/" + FD[0];
-  const FromDate=FT[0]===undefined ? finalDay1 :FD1;
-
-   //To Time      
-   const TT = selectshifttable?.ToTime?.split(' ') || [];
-   const ToTime = TT[1] !== undefined ? TT[1] : 
-                    Shift === "First" ? "14:00:00" : 
-                    Shift === "Second" ? "22:00:00" : 
-                    Shift === "Third" ? "6:00:00" : "";  
-
-        const DT=TT[0]?.split('-') || [];    
-        const DT1=DT[2] + "/" + DT[1] + "/" + DT[0];
-        const ToDate=TT[0]===undefined ? finalDay1 :DT1;  
- 
-                    
+  //Shift Date Formating
+  const shiftDate = selectshifttable?.ShiftDate;
+  let formattedDate = "";
+  
+  if (shiftDate) {
+    // Split by space to separate the date and time portions
+    const dateOnly = shiftDate.split(" ")[0];
+    const [year, month, day] = dateOnly.split("-");
+    formattedDate = `${day}/${month}/${year}`;
+  }
   
 
+  // //Formating From Time and ToTime
+  // const fromTime = ShiftInformation[0]?.FromTime;
+  // const toTime = ShiftInformation[0]?.ToTime;
 
+  // let formattedFromTime = "";
+  // let formattedToTime = "";
+
+  // if (fromTime) {
+  //   const [date, time] = fromTime.split(" ");
+  //   const [year, month, day] = date.split("-");
+  //   formattedFromTime = `${day}/${month}/${year} ${time}`;
+  // }
+
+  // if (toTime) {
+  //   const [date, time] = toTime.split(" ");
+  //   const [year, month, day] = date.split("-");
+  //   formattedToTime = `${day}/${month}/${year} ${time}`;
+  // }
+
+  // const formatDateTime = (dateTimeString) => {
+  //   if (!dateTimeString) return "";
+
+  //   const [date, time] = dateTimeString.split(" "); // Split into date and time
+  //   const [year, month, day] = date.split("-"); // Split the date part
+  //   return `${day}/${month}/${year} ${time}`; // Format as 'dd/mm/yyyy HH:MM:SS'
+  // };
+
+  console.log("selectshifttable is",selectshifttable);
 
   return (
     <div>
@@ -438,45 +466,45 @@ export default function MachineOperator() {
         <div className="row mt-3 mb-5">
           <div
             className="col-md-3  col-sm-12"
-            style={{ display: "flex", gap: "40px" }}
+            style={{ display: "flex", gap: "30px" }}
           >
             <label className="form-label">Shift Date</label>
-            <label className="form-label">{finalDay1}</label>
+            <label className="form-label">{formattedDate}</label>
           </div>
           <div
             className="col-md-3 col-sm-12"
-            style={{ display: "flex", gap: "40px", marginLeft: "-50px" }}
+            style={{ display: "flex", gap: "40px", marginLeft: "-80px" }}
           >
             <label className="form-label">Shift</label>
-            <label className="form-label">{selectshifttable.Shift=== undefined ? Shift : selectshifttable.Shift}</label>
+            <label className="form-label">
+              {selectshifttable?.Shift}
+            </label>
           </div>
         </div>
-        <div>
-        </div>
+        <div></div>
 
         <div
           style={{ display: "flex", gap: "30px", marginTop: "-30px" }}
           className="ms-2"
         >
-          <label className="form-label">{FromDate}</label>
-          <div className="col-md-3" style={{ display: "flex", marginLeft: "-18px"}}>
-            <label className="form-label">
-              <div>
-                {FromTime}
-              </div>
-            </label>
-          </div>
-          <span style={{ marginLeft: "-300px" }}>-</span>
+          <label className="form-label">
+            {selectshifttable?.FromTime
+             }
+          </label>{" "}
           <div
             className="col-md-3"
-            style={{ display: "flex", gap: "10px", marginLeft: "-12px" }}
+            style={{ display: "flex", marginLeft: "-18px" }}
+          ></div>
+
+          <span style={{ marginLeft: "-320px" }}>-</span>
+
+          <div
+            className="col-md-3"
+            style={{ display: "flex", gap: "10px", marginLeft: "20px" }}
           >
-            <label className="form-label">{ToDate}</label>
             <label className="form-label">
-              <div>
-                {ToTime}
-              </div>
-            </label>
+              {selectshifttable?.ToTime}
+            </label>{" "}
           </div>
         </div>
 
