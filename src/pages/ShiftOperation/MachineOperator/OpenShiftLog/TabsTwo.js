@@ -10,7 +10,7 @@ export default function TabsTwo({
   selectedMachine,
   getMachineShiftStatusForm,
   selectshifttable,
-  getmiddleTbaleData,setMachinetaskdata
+  getmiddleTbaleData,setMachinetaskdata,
 }) {
   const [key, setKey] = useState("pm");
 

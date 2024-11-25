@@ -153,7 +153,7 @@ const[newBOM,setNewBOM]=useState(false);
       });
     setLoadProgram(false);
     getMachineShiftStatusForm();
-    setSelectedMtrlTable([]);
+    // setSelectedMtrlTable([]);
   };
 
   // Utility function to convert minutes to "hh:mm" format
@@ -239,7 +239,7 @@ const[newBOM,setNewBOM]=useState(false);
                   value={
                     formdata?.NCProgramNo !== undefined
                       ? formdata?.NCProgramNo
-                      : ""
+                      : machineShiftStatus[0]?.NCProgarmNo
                   }/>
               </div>
               </div>

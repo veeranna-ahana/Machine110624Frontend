@@ -8,6 +8,7 @@ import OpenShiftModal from "./OpenShiftLogModal";
 import { useNavigate } from "react-router-dom";
 import { useGlobalContext } from "../../../Context/Context";
 
+
 export default function MachineOperator() {
   const {
     setAfterRefreshData,
@@ -92,6 +93,8 @@ export default function MachineOperator() {
   //Open ShiftLog  Modal
   const [openmodal, setOpenmodal] = useState("");
   const [requiredProgram, setRequiredProgram] = useState("");
+  // const formattedFromTime = format(new Date(selectshifttable?.FromTime), 'MM/dd/yyyy hh:mm:ss a');
+  // const formattedToTime = format(new Date(selectshifttable?.ToTime), 'MM/dd/yyyy hh:mm:ss a');
 
   const navigate = useNavigate();
 

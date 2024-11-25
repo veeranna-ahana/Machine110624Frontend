@@ -18,6 +18,9 @@ export default function ProgramPartsForm() {
   } = useGlobalContext();
 
   const [programPatsSelectedRow, setProgramPatsSelectedRow] = useState({});
+  const isTubeCutting = formdata?.Operation?.toLowerCase().includes(
+    "tube cutting".toLowerCase()
+  );
 
   const getProgramParts = () => {
     axios
@@ -306,32 +309,40 @@ export default function ProgramPartsForm() {
                     </td>
                   </>
                 ) : null}
-                <td>
-                  <input
-                    className="table-cell-editor"
-                    value={value.QtyRejected}
-                    onChange={(e) =>
-                      onChangeField(key, "QtyRejected", e.target.value)
-                    }
-                  />
-                </td>
-                <td>
-                  <input
-                    className="table-cell-editor"
-                    value={value.Remarks === "null" ? null : value.Remarks}
-                    maxLength={50}
-                    onChange={(e) => {
-                      const newValue = e.target.value;
-                      if (newValue.length <= 50) {
-                        onChangeField(key, "Remarks", newValue);
-                      } else {
-                        toast.error("Remarks cannot exceed 50 characters", {
-                          position: toast.POSITION.TOP_CENTER,
-                        });
+                {isTubeCutting ? (
+                  <td>{value.QtyRejected}</td>
+                ) : (
+                  <td>
+                    <input
+                      className="table-cell-editor"
+                      value={value.QtyRejected}
+                      onChange={(e) =>
+                        onChangeField(key, "QtyRejected", e.target.value)
                       }
-                    }}
-                  />
-                </td>
+                    />
+                  </td>
+                )}
+                {isTubeCutting ? (
+                  <td>{value.Remarks}</td>
+                ) : (
+                  <td>
+                    <input
+                      className="table-cell-editor"
+                      value={value.Remarks === "null" ? null : value.Remarks}
+                      maxLength={50}
+                      onChange={(e) => {
+                        const newValue = e.target.value;
+                        if (newValue.length <= 50) {
+                          onChangeField(key, "Remarks", newValue);
+                        } else {
+                          toast.error("Remarks cannot exceed 50 characters", {
+                            position: toast.POSITION.TOP_CENTER,
+                          });
+                        }
+                      }}
+                    />
+                  </td>
+                )}
               </tr>
             ))}
           </tbody>
