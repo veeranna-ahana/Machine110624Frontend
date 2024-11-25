@@ -15,11 +15,11 @@ export default function ProgramInfoForms({
   getMachineTaskData,
   setMachinetaskdata,
 }) {
-  const { setHasBOM, shiftSelected,formdata,servicedata, setService } = useGlobalContext();
+  const { setHasBOM, shiftSelected, formdata, servicedata, setService } =
+    useGlobalContext();
   const [loadProgramInfo, setloadProgramInfo] = useState(false);
   const [programComplete, setProgramComplete] = useState(false);
   const [complete, setComplete] = useState(false);
-
 
   const [selectProductionReport, setSelectProductionReport] = useState({});
   const selectProductionReportFun = (item, index) => {
@@ -36,31 +36,38 @@ export default function ProgramInfoForms({
     setOpenTable(false);
   };
 
-    // UseEffect to update the selectProductionReport when getMachinetaskdata changes
-    useEffect(() => {
-      if (getMachinetaskdata?.length > 0 && selectProductionReport?.Ncid) {
-        // Find the matching item in getMachinetaskdata
-        const updatedItem = getMachinetaskdata.find(item => item.Ncid === selectProductionReport.Ncid);
-        
-        if (updatedItem) {
-          const list = { ...updatedItem, index: getMachinetaskdata.indexOf(updatedItem) };
-          setSelectProductionReport(list); 
-        }
-      }
-    }, [getMachinetaskdata]);
+  // UseEffect to update the selectProductionReport when getMachinetaskdata changes
+  useEffect(() => {
+    if (getMachinetaskdata?.length > 0 && selectProductionReport?.Ncid) {
+      // Find the matching item in getMachinetaskdata
+      const updatedItem = getMachinetaskdata.find(
+        (item) => item.Ncid === selectProductionReport.Ncid
+      );
 
+      if (updatedItem) {
+        const list = {
+          ...updatedItem,
+          index: getMachinetaskdata.indexOf(updatedItem),
+        };
+        setSelectProductionReport(list);
+      }
+    }
+  }, [getMachinetaskdata]);
 
   //Load Program
   const [rpTopData, setRptTopData] = useState([]);
   const [openTable, setOpenTable] = useState(false);
+  const [loadProgramButton, setloadProgramButton] = useState(false);
+
   const handleButtonClick = () => {
+    setloadProgramButton(true);
     axios
-    .post(baseURL + "/ShiftOperator/MachineTasksService", {
-      NCId: selectProductionReport.Ncid,
-    })
-    .then((response) => {
-      setService(response.data);
-    })
+      .post(baseURL + "/ShiftOperator/MachineTasksService", {
+        NCId: selectProductionReport.Ncid,
+      })
+      .then((response) => {
+        setService(response.data);
+      });
     axios
       .post(baseURL + "/ShiftOperator/getTableTopDeatails", {
         NCId: selectProductionReport?.Ncid,
@@ -68,38 +75,36 @@ export default function ProgramInfoForms({
       .then((response) => {
         setRptTopData(response.data);
         const data = response.data;
-                  let count = 0;
-                  let Qty = 0;
+        let count = 0;
+        let Qty = 0;
 
+        // Iterate through each object in the response data
+        data.forEach((item) => {
+          // Check if Used or Rejected is equal to 1, or if QtyUsed is equal to 1 or QtyReturned is true
+          if (selectProductionReport.HasBOM === 1) {
+            count = item.QtyUsed + item.QtyReturned;
+            Qty = item?.QtyIssued;
+          }
+        });
 
-                  // Iterate through each object in the response data
-                  data.forEach((item) => {
-                    // Check if Used or Rejected is equal to 1, or if QtyUsed is equal to 1 or QtyReturned is true
-                    if (selectProductionReport.HasBOM === 1) {
-                      count = item.QtyUsed + item.QtyReturned;
-                      Qty = item?.QtyIssued;
-                    }
-                  });
-
-                  // If count equals selectProductionReport.Qty, setComplete(true)
-                  if (count === Qty) {
-                    setComplete(true);
-                  } else {
-                    setComplete(false);
-                  }
-
+        // If count equals selectProductionReport.Qty, setComplete(true)
+        if (count === Qty) {
+          setComplete(true);
+        } else {
+          setComplete(false);
+        }
       });
-          // console.log(selectProductionReport.Ncid, newNcid);
-          if (selectProductionReport.NCProgramNo === formdata?.NCProgramNo) {
-            toast.error(
-              "Program Currently Being Processed, Use Current Program Window To Update Values",
-              {
-                position: toast.POSITION.TOP_CENTER,
-              }
-            );
-          } else {
-            setOpenTable(true);
-        } 
+    // console.log(selectProductionReport.Ncid, newNcid);
+    if (selectProductionReport.NCProgramNo === formdata?.NCProgramNo) {
+      toast.error(
+        "Program Currently Being Processed, Use Current Program Window To Update Values",
+        {
+          position: toast.POSITION.TOP_CENTER,
+        }
+      );
+    } else {
+      setOpenTable(true);
+    }
   };
 
   const handleSubmit = () => {
@@ -127,51 +132,57 @@ export default function ProgramInfoForms({
 
   //mark as Completed
   const programCompleteSubmit = async () => {
-    try {
-      const response = await axios.post(baseURL + "/ShiftOperator/getNCId", {
-        shiftSelected,
-      });
+    if (loadProgramButton) {
+      try {
+        const response = await axios.post(baseURL + "/ShiftOperator/getNCId", {
+          shiftSelected,
+        });
 
-      if (response.data && response.data.length > 0) {
-        const newNcid = response.data[0].Ncid;
+        if (response.data && response.data.length > 0) {
+          const newNcid = response.data[0].Ncid;
 
-        if (selectProductionReport.Ncid === newNcid) {
+          if (selectProductionReport.Ncid === newNcid) {
+            toast.error(
+              "Program Currently Being Processed, Use Current Program Window To Update Values",
+              {
+                position: toast.POSITION.TOP_CENTER,
+              }
+            );
+            return; // Exit the function early if program is currently being processed
+          }
+        }
+
+        // If matching object is found and QtyCut is less than Qty, show an error toast
+        if (complete === false) {
           toast.error(
-            "Program Currently Being Processed, Use Current Program Window To Update Values",
+            "Either mark the material allotted as used or rejected before changing status to completed",
             {
               position: toast.POSITION.TOP_CENTER,
             }
           );
-          return; // Exit the function early if program is currently being processed
+          return;
         }
-      }
 
-      // If matching object is found and QtyCut is less than Qty, show an error toast
-      if (complete === false) {
-        toast.error(
-          "Either mark the material allotted as used or rejected before changing status to completed",
-          {
-            position: toast.POSITION.TOP_CENTER,
-          }
-        );
-        return;
+        // // If QtyCut is less than Qty, show an error toast
+        // if (selectProductionReport.QtyCut < selectProductionReport.Qty) {
+        //   toast.error(
+        //     "Either mark the material allotted as used or rejected before changing status to completed",
+        //     {
+        //       position: toast.POSITION.TOP_CENTER,
+        //     }
+        //   );
+        //   return;
+        // }
+        else {
+          setProgramComplete(true);
+        }
+      } catch (error) {
+        // Handle error if the request fails
       }
-
-      // // If QtyCut is less than Qty, show an error toast
-      // if (selectProductionReport.QtyCut < selectProductionReport.Qty) {
-      //   toast.error(
-      //     "Either mark the material allotted as used or rejected before changing status to completed",
-      //     {
-      //       position: toast.POSITION.TOP_CENTER,
-      //     }
-      //   );
-      //   return;
-      // }
-      else {
-        setProgramComplete(true);
-      }
-    } catch (error) {
-      // Handle error if the request fails
+    } else {
+      toast.error("Please Load the Program Info", {
+        position: toast.POSITION.TOP_CENTER,
+      });
     }
   };
 
@@ -180,7 +191,6 @@ export default function ProgramInfoForms({
       selectProductionReportFun(getMachinetaskdata[0], 0); // Select the first row
     }
   }, [getMachinetaskdata, selectProductionReport, selectProductionReportFun]);
-
 
   const handleRefresh = () => {
     setOpenTable(false);
@@ -222,10 +232,10 @@ export default function ProgramInfoForms({
   const convertMinutesToTime = (minutes) => {
     const hours = Math.floor(minutes / 60);
     const mins = minutes % 60;
-  
+
     const hoursString = `${hours} Hours`;
     const minsString = `${mins} Min`;
-  
+
     return `${hoursString} ${minsString}`;
   };
 
@@ -301,7 +311,10 @@ export default function ProgramInfoForms({
               </label>
             </div>
 
-            <div className="d-flex" style={{ marginLeft: "10px", marginTop: "-5px", gap:'30px' }}>
+            <div
+              className="d-flex"
+              style={{ marginLeft: "10px", marginTop: "-5px", gap: "30px" }}
+            >
               <label className="form-label">
                 {" "}
                 To Process : <b> {selectProductionReport?.Qty} </b>
@@ -349,7 +362,10 @@ export default function ProgramInfoForms({
                 Material :<b> {selectProductionReport?.Mtrl_Code}</b>
               </label>
             </div>
-            <div className="d-flex" style={{ marginLeft: "10px", gap:'30px', marginTop: "-5px" }}>
+            <div
+              className="d-flex"
+              style={{ marginLeft: "10px", gap: "30px", marginTop: "-5px" }}
+            >
               <div>
                 <label className="form-label">
                   Drawings :<b> {selectProductionReport?.NoOfDwgs} </b>
