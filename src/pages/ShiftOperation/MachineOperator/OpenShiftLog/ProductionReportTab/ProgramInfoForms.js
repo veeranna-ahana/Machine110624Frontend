@@ -22,7 +22,9 @@ export default function ProgramInfoForms({
   const [complete, setComplete] = useState(false);
 
   const [selectProductionReport, setSelectProductionReport] = useState({});
+
   const selectProductionReportFun = (item, index) => {
+    setloadProgramButton(false);
     let list = { ...item, index: index };
     setSelectProductionReport(list);
     axios
@@ -61,6 +63,10 @@ export default function ProgramInfoForms({
 
   const handleButtonClick = () => {
     setloadProgramButton(true);
+
+    console.log('selectProductionReport.Ncid', selectProductionReport.Ncid);
+    
+
     axios
       .post(baseURL + "/ShiftOperator/MachineTasksService", {
         NCId: selectProductionReport.Ncid,
@@ -68,6 +74,7 @@ export default function ProgramInfoForms({
       .then((response) => {
         setService(response.data);
       });
+
     axios
       .post(baseURL + "/ShiftOperator/getTableTopDeatails", {
         NCId: selectProductionReport?.Ncid,
@@ -180,7 +187,7 @@ export default function ProgramInfoForms({
         // Handle error if the request fails
       }
     } else {
-      toast.error("Please Load the Program Info", {
+      toast.error("Load the Program to Close", {
         position: toast.POSITION.TOP_CENTER,
       });
     }

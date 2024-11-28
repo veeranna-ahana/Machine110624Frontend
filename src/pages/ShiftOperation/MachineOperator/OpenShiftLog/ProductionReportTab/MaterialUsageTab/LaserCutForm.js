@@ -493,7 +493,7 @@ export default function LaserCutForm({
                   </th>
                 </tr>
               </thead>
-              <tbody className="tablebody table-space">
+              {/* <tbody className="tablebody table-space">
                 {sortedData()?.map((data, key) => (
                   <tr
                     onClick={() => {
@@ -516,7 +516,7 @@ export default function LaserCutForm({
 
                     <td>
                       {data.RejectionReason}
-                      {/* <div key={data.index}>
+                      <div key={data.index}>
                         <input
                           className="table-cell-editor"
                           style={{ textAlign: "center", width: "150px" }}
@@ -528,10 +528,55 @@ export default function LaserCutForm({
                           readOnly={data.Rejected === 1}
                           onChange={(e) => onChangeInput(data.NcPgmMtrlId, e)}
                         />
-                      </div> */}
+                      </div>
                     </td>
                   </tr>
                 ))}
+              </tbody> */}
+
+              <tbody className="tablebody table-space">
+                {sortedData() && sortedData().length > 0 ? (
+                  sortedData().map((data, key) => (
+                    <tr
+                      key={key}
+                      onClick={() => {
+                        initialRowSelection(data, key);
+                      }}
+                      className={
+                        selectdefaultRow.includes(data) ? "selcted-row-clr" : ""
+                      }
+                    >
+                      <td></td>
+                      <td>{data.ShapeMtrlID}</td>
+                      <td>{data.Para1}</td>
+                      <td>{data.Para2}</td>
+                      <td>
+                        <input
+                          type="checkbox"
+                          checked={data.Used === 1}
+                          readOnly
+                        />
+                      </td>
+                      <td>
+                        <input
+                          type="checkbox"
+                          checked={data.Rejected === 1}
+                          readOnly
+                        />
+                      </td>
+                      <td>{data.RejectionReason}</td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td
+                      colSpan="7"
+                      style={{ textAlign: "center" }}
+                    >
+                      Data not found!
+                    </td>
+                  </tr>
+                )}
               </tbody>
             </Table>
           </div>
