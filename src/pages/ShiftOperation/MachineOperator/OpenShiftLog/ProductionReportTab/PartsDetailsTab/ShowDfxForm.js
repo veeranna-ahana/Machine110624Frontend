@@ -169,7 +169,8 @@ export default function ShowDfxForm({ openTable, selectProductionReport }) {
             <tbody className="tablebody table-space" style={{ fontSize: "13px" }}>
               {partDetailsData.length === 0 ? (
                 <tr>
-                  <td colSpan="6">No data to show</td>
+                  <td colSpan="7"
+                    style={{ textAlign: "center", padding: "10px" }}>Data not found!</td>
                 </tr>
               ) : (
                 sortedData().map((value, key) => (
