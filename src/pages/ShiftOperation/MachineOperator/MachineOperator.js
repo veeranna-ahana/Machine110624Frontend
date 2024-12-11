@@ -369,7 +369,7 @@ export default function MachineOperator() {
           </label>
           <select className="ip-select" onChange={handleMachineChange}>
             <option selected>Select Machine</option>
-            {machineList.map((dataMachineList) => (
+            {machineList?.map((dataMachineList) => (
               <option value={dataMachineList.refName}>
                 {dataMachineList.refName}
               </option>
