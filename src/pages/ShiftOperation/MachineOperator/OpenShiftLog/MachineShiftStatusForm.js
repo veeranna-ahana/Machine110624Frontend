@@ -209,7 +209,8 @@ export default function MachineShiftStatusForm({
                 </div>
                 <div style={{ marginTop: "-8px" }}>
                   <label className="form-label">
-                    Current : {machineShiftStatus[0]?.Operator}
+                    {/* Current : {machineShiftStatus[0]?.Operator} */}
+                    Current : {selectshifttable?.Operator}
                   </label>
                 </div>
               </div>
