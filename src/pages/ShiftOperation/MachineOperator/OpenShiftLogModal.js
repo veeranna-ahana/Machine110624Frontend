@@ -74,6 +74,8 @@ export default function OpenShiftModal({
           selectshifttable,
         })
         .then((response) => {
+          console.log('OpenShiftLogModal', response.data);
+          
         })
         .catch((error) => {
           console.log(error)

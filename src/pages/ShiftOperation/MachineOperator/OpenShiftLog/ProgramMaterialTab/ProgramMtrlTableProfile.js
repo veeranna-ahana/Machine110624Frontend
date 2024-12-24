@@ -528,6 +528,7 @@ export default function ProgrmMatrlTableProfile({
           MarkasUsed={MarkasUsed}
           setMarkasUsed={setMarkasUsed}
           handleMarkasUsed={handleMarkasUsed}
+          setSelectedMtrlTable={setSelectedMtrlTable}
         />
 
         <MarkAsRejected
