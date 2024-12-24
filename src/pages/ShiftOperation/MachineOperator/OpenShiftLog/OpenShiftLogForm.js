@@ -113,6 +113,10 @@ export default function OpenShiftLogForm({
 
   const [disableTaskNo, setDisableTaskNo] = useState(true);
   const handleChangeStoppageList = (e) => {
+
+    console.log('Magod Material', e.target.value);
+    
+
     if (e.target.value === "9") {
       setStoppageID(e.target.value);
       setDisableTaskNo(false);
@@ -188,6 +192,9 @@ export default function OpenShiftLogForm({
   const onClickofClose = () => {
     navigate("/Machine");
   };
+
+  console.log('stoppageList', stoppageList);
+  
 
   return (
     <>

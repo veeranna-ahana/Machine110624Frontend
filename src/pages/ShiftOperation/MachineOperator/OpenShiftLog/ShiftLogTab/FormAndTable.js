@@ -21,61 +21,110 @@ export default function FormAndTable({
   } = useGlobalContext();
   const [open, setOpen] = useState(false);
 
-
   const blockInvalidChar = (e) => {
-  const invalidChars = [
-    "!",
-    "@",
-    "#",
-    "$",
-    "%",
-    "^",
-    "&",
-    "*",
-    "(",
-    ")",
-    "_",
-    "-",
-    "+",
-    "=",
-    "|",
-    "}",
-    "{",
-    "[",
-    "]",
-    ".",
-    ",",
-    "?", 
-    '"',
-    "<",
-    ">",
-    "`",
-    "~",
-    ";",
-    "a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z",
-    "A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"
-  ];
-  if (invalidChars.includes(e.key) || e.key === "'" || e.key === "\\") {
-    e.preventDefault();
-  }
-}
+    const invalidChars = [
+      "!",
+      "@",
+      "#",
+      "$",
+      "%",
+      "^",
+      "&",
+      "*",
+      "(",
+      ")",
+      "_",
+      "-",
+      "+",
+      "=",
+      "|",
+      "}",
+      "{",
+      "[",
+      "]",
+      ".",
+      ",",
+      "?",
+      '"',
+      "<",
+      ">",
+      "`",
+      "~",
+      ";",
+      "a",
+      "b",
+      "c",
+      "d",
+      "e",
+      "f",
+      "g",
+      "h",
+      "i",
+      "j",
+      "k",
+      "l",
+      "m",
+      "n",
+      "o",
+      "p",
+      "q",
+      "r",
+      "s",
+      "t",
+      "u",
+      "v",
+      "w",
+      "x",
+      "y",
+      "z",
+      "A",
+      "B",
+      "C",
+      "D",
+      "E",
+      "F",
+      "G",
+      "H",
+      "I",
+      "J",
+      "K",
+      "L",
+      "M",
+      "N",
+      "O",
+      "P",
+      "Q",
+      "R",
+      "S",
+      "T",
+      "U",
+      "V",
+      "W",
+      "X",
+      "Y",
+      "Z",
+    ];
+    if (invalidChars.includes(e.key) || e.key === "'" || e.key === "\\") {
+      e.preventDefault();
+    }
+  };
 
   const handleTimeChange = (index, field, value) => {
-        const maxLength = 19; // Length of 'DD/MM/YYYY HH:MM:SS'
+    const maxLength = 19; // Length of 'DD/MM/YYYY HH:MM:SS'
 
     if (value.length > maxLength) {
-        toast.error(`Invalid ${field} format. Please use DD/MM/YYYY HH:MM:SS`, {
+      toast.error(`Invalid ${field} format. Please use DD/MM/YYYY HH:MM:SS`, {
         position: toast.POSITION.TOP_CENTER,
       });
       return;
     }
-    if(value.length ===0){
+    if (value.length === 0) {
       toast.error(`Input field cannot be empty`, {
         position: toast.POSITION.TOP_CENTER,
       });
     }
 
-    const updatedshiftLogDetails = [...shiftLogDetails]; 
+    const updatedshiftLogDetails = [...shiftLogDetails];
     // Update the specific item's field with the new value
     updatedshiftLogDetails[index] = {
       ...updatedshiftLogDetails[index],
@@ -85,32 +134,39 @@ export default function FormAndTable({
   };
 
   const saveShiftLog = () => {
-      // Regular expression to validate dd/mm/yyyy HH:MM format
-      const dateTimeRegex = /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/\d{4} ([01][0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9])$/;
-        
-      // Check if any log entry has empty or invalid FromTime or ToTime
-      for (let log of shiftLogDetails) {
-        if (!log.FromTime || !log.ToTime) {
-          toast.error("FromTime and ToTime cannot be empty", {
-            position: toast.POSITION.TOP_CENTER,
-          });
-          return;
-        }
-        if (!dateTimeRegex.test(log.FromTime) || !dateTimeRegex.test(log.ToTime)) {
-          toast.error("FromTime and ToTime must be in the format dd/mm/yyyy HH:MM and within valid ranges", {
-            position: toast.POSITION.TOP_CENTER,
-          });
-          return;
-        }
+    // Regular expression to validate dd/mm/yyyy HH:MM format
+    const dateTimeRegex =
+      /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/\d{4} ([01][0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9])$/;
+
+    // Check if any log entry has empty or invalid FromTime or ToTime
+    for (let log of shiftLogDetails) {
+      if (!log.FromTime || !log.ToTime) {
+        toast.error("FromTime and ToTime cannot be empty", {
+          position: toast.POSITION.TOP_CENTER,
+        });
+        return;
       }
+      if (
+        !dateTimeRegex.test(log.FromTime) ||
+        !dateTimeRegex.test(log.ToTime)
+      ) {
+        toast.error(
+          "FromTime and ToTime must be in the format dd/mm/yyyy HH:MM and within valid ranges",
+          {
+            position: toast.POSITION.TOP_CENTER,
+          }
+        );
+        return;
+      }
+    }
 
     axios
       .post(baseURL + "/ShiftOperator/saveShiftLog", { shiftLogDetails })
       .then((response) => {
         toast.success(`Sucessfully Saved`, {
           position: toast.POSITION.TOP_CENTER,
-        }); 
-           })
+        });
+      })
       .catch((error) => {
         console.error("Error occurred:", error);
       });
@@ -365,6 +421,8 @@ export default function FormAndTable({
   }, [shiftLogDetails, currentTime]);
 
   // console.log("timeDiffInMinutes is",timeDiffInMinutes);
+
+  console.log("hiftLogDetails", shiftLogDetails);
 
   return (
     <div>

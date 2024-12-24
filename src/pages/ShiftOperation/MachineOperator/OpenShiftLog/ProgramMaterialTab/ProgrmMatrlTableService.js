@@ -108,7 +108,7 @@ export default function ProgrmMatrlTableService({
           const ncPgmePartId = response.data[0].NC_Pgme_Part_ID;
           setNC_Pgme_Part_ID(ncPgmePartId);
 
-          if (issuesets < 0) {
+          if (issuesets <= 0) {
             toast.error("Enter a Positive Number", {
               position: toast.POSITION.TOP_CENTER,
             });

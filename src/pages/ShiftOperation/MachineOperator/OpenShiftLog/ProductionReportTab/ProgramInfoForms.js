@@ -100,6 +100,13 @@ export default function ProgramInfoForms({
         } else {
           setComplete(false);
         }
+
+        // if (count !== 0 && count === Qty) {
+        //   setComplete(true);
+        // } else {
+        //   setComplete(false);
+        // }
+        
       });
     // console.log(selectProductionReport.Ncid, newNcid);
     if (selectProductionReport.NCProgramNo === formdata?.NCProgramNo) {
@@ -171,15 +178,15 @@ export default function ProgramInfoForms({
         }
 
         // // If QtyCut is less than Qty, show an error toast
-        // if (selectProductionReport.QtyCut < selectProductionReport.Qty) {
-        //   toast.error(
-        //     "Either mark the material allotted as used or rejected before changing status to completed",
-        //     {
-        //       position: toast.POSITION.TOP_CENTER,
-        //     }
-        //   );
-        //   return;
-        // }
+        if (selectProductionReport.QtyCut < selectProductionReport.Qty) {
+          toast.error(
+            "Either mark the material allotted as used or rejected before changing status to completed",
+            {
+              position: toast.POSITION.TOP_CENTER,
+            }
+          );
+          return;
+        }
         else {
           setProgramComplete(true);
         }
@@ -245,6 +252,9 @@ export default function ProgramInfoForms({
 
     return `${hoursString} ${minsString}`;
   };
+
+  console.log('selectProductionReport', selectProductionReport);
+  
 
   return (
     <div>
