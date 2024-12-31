@@ -23,7 +23,7 @@ export default function OpenShiftModal({
     Shift: Shift,
     date: date,
   };
-  const { setShiftLogDetails, setMachinetaskdata } = useGlobalContext();
+  const { setShiftLogDetails, setMachinetaskdata, shiftLogDetails } = useGlobalContext();
 
 
   //Machine Task Table
@@ -66,6 +66,10 @@ export default function OpenShiftModal({
 
   //Onclick of Yes in OpenShiftLog Modal
   const openShiftPage = () => {
+
+    console.log('requiredProgram[0].NCProgarmNo', requiredProgram);
+    
+
     if (isNaN(requiredProgram[0].NCProgarmNo)) {
       navigate("OpenShiftLog", { state: { data } });
       axios
@@ -74,8 +78,6 @@ export default function OpenShiftModal({
           selectshifttable,
         })
         .then((response) => {
-          console.log('OpenShiftLogModal', response.data);
-          
         })
         .catch((error) => {
           console.log(error)
@@ -89,6 +91,7 @@ export default function OpenShiftModal({
           selectshifttable,
         })
         .then((response) => {
+          console.log('OpenShiftLogModalYes', response.data);
         })
         .catch((error) => {
         });
@@ -123,6 +126,10 @@ export default function OpenShiftModal({
 
   //get ShiftLog Data
   const getShiftLogData = () => {
+
+    console.log('selectshifttable', selectshifttable);
+    
+
     axios
       .post(baseURL + "/ShiftOperator/getShiftLog", {
         selectshifttable: selectshifttable,
@@ -152,6 +159,9 @@ export default function OpenShiftModal({
           return item;
         });
 
+        console.log('updatedData', updatedData);
+        
+
         setShiftLogDetails(updatedData);
       })
       .catch((error) => {
@@ -161,13 +171,15 @@ export default function OpenShiftModal({
 
   useEffect(() => {
     getShiftLogData();
-  }, []);
+  }, [selectshifttable]);
 
 
   const handleCloseOk = () => {
     setOpenmodal(false);
   };
 
+  console.log('OPen Shift Log', shiftLogDetails);
+  
 
   return (
     <div>

@@ -64,8 +64,7 @@ export default function ProgramInfoForms({
   const handleButtonClick = () => {
     setloadProgramButton(true);
 
-    console.log('selectProductionReport.Ncid', selectProductionReport.Ncid);
-    
+    console.log("selectProductionReport.Ncid", selectProductionReport.Ncid);
 
     axios
       .post(baseURL + "/ShiftOperator/MachineTasksService", {
@@ -106,7 +105,6 @@ export default function ProgramInfoForms({
         // } else {
         //   setComplete(false);
         // }
-        
       });
     // console.log(selectProductionReport.Ncid, newNcid);
     if (selectProductionReport.NCProgramNo === formdata?.NCProgramNo) {
@@ -177,8 +175,11 @@ export default function ProgramInfoForms({
           return;
         }
 
-        // // If QtyCut is less than Qty, show an error toast
-        if (selectProductionReport.QtyCut < selectProductionReport.Qty) {
+        // If QtyCut is less than Qty, show an error toast
+        if (
+          selectProductionReport.HasBOM === 0 &&
+          selectProductionReport.QtyCut < selectProductionReport.Qty
+        ) {
           toast.error(
             "Either mark the material allotted as used or rejected before changing status to completed",
             {
@@ -186,8 +187,7 @@ export default function ProgramInfoForms({
             }
           );
           return;
-        }
-        else {
+        } else {
           setProgramComplete(true);
         }
       } catch (error) {
@@ -253,8 +253,7 @@ export default function ProgramInfoForms({
     return `${hoursString} ${minsString}`;
   };
 
-  console.log('selectProductionReport', selectProductionReport);
-  
+  console.log("selectProductionReport", selectProductionReport);
 
   return (
     <div>

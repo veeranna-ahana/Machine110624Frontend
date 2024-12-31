@@ -48,10 +48,10 @@ export default function ProgramCompleteModal({
     <div>
       <Modal show={programComplete} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title style={{fontSize:'14px'}}>magod_machine</Modal.Title>
+          <Modal.Title style={{ fontSize: "14px" }}>magod_machine</Modal.Title>
         </Modal.Header>
 
-        <Modal.Body style={{fontSize:'12px'}}>
+        <Modal.Body style={{ fontSize: "12px" }}>
           Do you want to change status of program to completed ?
         </Modal.Body>
 

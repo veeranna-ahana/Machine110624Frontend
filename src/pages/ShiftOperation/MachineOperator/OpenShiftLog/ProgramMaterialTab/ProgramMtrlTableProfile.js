@@ -544,6 +544,7 @@ export default function ProgrmMatrlTableProfile({
         setOpenRejectionReason={setOpenRejectionReason}
         onChangeInput={onChangeInput}
         onclickofYes={onclickofYes}
+        setSelectedMtrlTable={setSelectedMtrlTable}
         />
       </div>
     </div>
