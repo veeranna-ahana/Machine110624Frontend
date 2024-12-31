@@ -394,21 +394,21 @@ export default function ProgrmMatrlTableService({
                   </label>
                 </div>
 
-                <div
-                  className="col-md-3"
-                  style={{ marginTop: "-10px", marginLeft: "-10px" }}
-                >
-                  <label className="form-label" style={{ fontSize: "10px" }}>
-                    Used :{servicetopData[0]?.QtyUsed}
-                  </label>
-                </div>
-
                 <div className="col-md-3" style={{ marginTop: "-10px" }}>
                   <label
                     className="form-label"
                     style={{ fontSize: "10px", marginLeft: "-15px" }}
                   >
                     Sets Issued :{servicetopData[0]?.QtyIssued}
+                  </label>
+                </div>
+
+                <div
+                  className="col-md-3"
+                  style={{ marginTop: "-10px", marginLeft: "-10px" }}
+                >
+                  <label className="form-label" style={{ fontSize: "10px" }}>
+                    Used :{servicetopData[0]?.QtyUsed}
                   </label>
                 </div>
 

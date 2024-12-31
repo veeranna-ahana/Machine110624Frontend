@@ -422,7 +422,7 @@ export default function FormAndTable({
 
   // console.log("timeDiffInMinutes is",timeDiffInMinutes);
 
-  console.log("hiftLogDetails", shiftLogDetails);
+  // console.log("hiftLogDetails", shiftLogDetails);
 
   return (
     <div>

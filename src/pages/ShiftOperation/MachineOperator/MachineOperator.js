@@ -193,7 +193,7 @@ export default function MachineOperator() {
         if (response.data.length !== 0 && numberOfProperties !== 0) {
           // //ProcessTaskStatus
           // axios
-          //   .post(baseURL + "/ShiftOperator/ProcessTaskStatus", {
+          //   .post(baseURL + "/rocessTShiftOperator/PaskStatus", {
           //     ShiftDate: date,
           //   })
           //   .then((response) => {

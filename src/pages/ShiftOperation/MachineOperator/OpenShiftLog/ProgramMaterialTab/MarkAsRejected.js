@@ -20,20 +20,20 @@ export default function MarkAsRejected({
     <div>
       <Modal show={MarkasReject} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>magod_machine</Modal.Title>
+          <Modal.Title style={{fontSize:'14px'}}>magod_machine</Modal.Title>
         </Modal.Header>
 
-        <Modal.Body>
+        <Modal.Body style={{fontSize:'12px'}}>
           Material once Marked as Rejected cannot be used again. Are you sure?
         </Modal.Body>
 
         <Modal.Footer>
-          <Button variant="primary" onClick={handleYesClick}>
+          <button className="group-button button-style" onClick={handleYesClick}>
             Yes
-          </Button>
-          <Button variant="secondary" onClick={handleClose}>
+          </button>
+          <button className="group-button button-style" onClick={handleClose}>
             No
-          </Button>
+          </button>
         </Modal.Footer>
       </Modal>
     </div>
