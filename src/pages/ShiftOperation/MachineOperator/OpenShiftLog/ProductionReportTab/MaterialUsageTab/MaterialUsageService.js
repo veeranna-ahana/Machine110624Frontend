@@ -576,6 +576,9 @@ export default function MaterialUsageService({
     setSelectedRowService(allRowsSelected ? [] : servicedata);
   };
 
+  // console.log('servicedata in MaterialUsage', servicedata);
+  
+
   return (
     <div>
       {openTable ? (

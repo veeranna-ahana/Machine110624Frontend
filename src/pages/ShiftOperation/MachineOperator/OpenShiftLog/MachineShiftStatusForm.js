@@ -181,7 +181,7 @@ export default function MachineShiftStatusForm({
     }, []); 
 
 
-    console.log("machineShiftStatus is",machineShiftStatus);
+    // console.log("machineShiftStatus is",machineShiftStatus);
 
   return (
     <>

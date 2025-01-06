@@ -18,6 +18,9 @@ export default function MaterialAndPartsTabs({
   const { hasBOM } = useGlobalContext();
   const [key, setKey] = useState("mu");
   // console.log("dde", selectProductionReport )
+
+  // console.log('hasBOM', hasBOM);
+  
   return (
     <div>
       <div className="row">
@@ -29,7 +32,7 @@ export default function MaterialAndPartsTabs({
           
         >
           <Tab eventKey="mu" title="Material Usage">
-            {hasBOM === true ? (
+            {selectProductionReport.HasBOM === 1 ? (
               <MaterialUsageService
                 openTable={openTable}
                 selectProductionReport={selectProductionReport}

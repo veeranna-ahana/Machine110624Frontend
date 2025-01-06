@@ -205,7 +205,7 @@ export default function ProgramPartsForm() {
     return dataCopy;
   };
 
-  console.log("programPartsData is", programPartsData);
+  // console.log("programPartsData is", programPartsData);
 
   return (
     <div>

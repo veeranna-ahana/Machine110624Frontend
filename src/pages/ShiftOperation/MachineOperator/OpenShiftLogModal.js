@@ -178,7 +178,7 @@ export default function OpenShiftModal({
     setOpenmodal(false);
   };
 
-  console.log('OPen Shift Log', shiftLogDetails);
+  // console.log('OPen Shift Log', shiftLogDetails);
   
 
   return (
