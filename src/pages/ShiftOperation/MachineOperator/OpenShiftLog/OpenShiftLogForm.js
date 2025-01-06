@@ -193,7 +193,7 @@ export default function OpenShiftLogForm({
     navigate("/Machine");
   };
 
-  console.log('stoppageList', stoppageList);
+  // console.log('stoppageList', stoppageList);
   
 
   return (

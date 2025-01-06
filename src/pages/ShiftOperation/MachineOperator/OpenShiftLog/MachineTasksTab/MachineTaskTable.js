@@ -43,6 +43,7 @@ export default function MachineTaskTable({
   const [open, setOpen] = useState(false);
   const [isDataDisplayed, setIsDataDisplayed] = useState(false);
   const [ErrorshowModal, setErrorshowModal] = useState(false);
+  const [selectedMachineTask,  setSelectedMachineTask] = useState([]);
 
   const openModal = () => {
     if (isDataDisplayed && pgmNo != selectedProgram.NCProgramNo) {
@@ -129,6 +130,7 @@ export default function MachineTaskTable({
   const selectProgramFun = (item, index) => {
     let list = { ...item, index: index };
     setSelectedProgram(list);
+    setSelectedMachineTask(list)
   
     axios
       .post(baseURL + "/ShiftOperator/checkhasBOM", {
@@ -197,7 +199,7 @@ export default function MachineTaskTable({
   const [newTableTopData, setNewTableTopData] = useState([]);
   const machinetask = () => {
     // console.log(hasBOM)
-    if (hasBOM === true) {
+    if (selectedMachineTask.HasBOM === 1) {
       axios
         .post(baseURL + "/ShiftOperator/MachineTasksService", {
           NCId: selectedProgram?.Ncid,
@@ -551,7 +553,7 @@ export default function MachineTaskTable({
         </div>
       </div>
 
-      {hasBOM === true ? (
+      {selectedMachineTask.HasBOM === 1 ? (
         <MachineTaskService
           machineTaskService={machineTaskService}
           servicetopData={newTableTopData}

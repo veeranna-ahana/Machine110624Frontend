@@ -60,6 +60,47 @@ export default function TabsFour({
 
   let Machine = selectshifttable?.Machine;
 
+  const [initialShiftLogDetails, setInitialShiftLogDetails] = useState([]);
+
+  const getInitialShiftLogDetails = () => {
+    axios
+      .post(baseURL + "/ShiftOperator/getInitialShiftLog", {
+        selectshifttable: selectshifttable,
+      })
+      .then((response) => {
+        const updatedData = response.data.map((item) => {
+          let dateSplit = item.FromTime.split(" ");
+          let date = dateSplit[0].split("-");
+          let year = date[0];
+          let month = date[1];
+          let day = date[2];
+          let finalDay = `${day}/${month}/${year} ${dateSplit[1]}`;
+          item.FromTime = finalDay;
+
+          let dateSplit1 = item.ToTime.split(" ");
+          let date1 = dateSplit1[0].split("-");
+          let year1 = date1[0];
+          let month1 = date1[1];
+          let day1 = date1[2];
+          let finalDay1 = `${day1}/${month1}/${year1} ${dateSplit1[1]}`;
+          item.ToTime = finalDay1;
+
+          if (item.Locked === 1) {
+            item.rowColor = "#87CEEB";
+          } else {
+            // console.log(null);
+          }
+          return item;
+        });
+          //  console.log("updated bbbbb data",updatedData);
+        // Update the state with the modified data
+        setInitialShiftLogDetails(updatedData);
+      })
+      .catch((error) => {
+        console.error("Error occurred:", error);
+      });
+  };
+
   const { setShiftLogDetails, shiftLogDetails } = useGlobalContext();
   //ShiftLog Table
   const getShiftLogDetails = () => {
@@ -92,7 +133,7 @@ export default function TabsFour({
           }
           return item;
         });
-           console.log("updated data",updatedData);
+          //  console.log("updated data",updatedData);
         // Update the state with the modified data
         setShiftLogDetails(updatedData);
       })
@@ -106,10 +147,17 @@ export default function TabsFour({
     getShiftLogDetails();
   }, []);
 
+  useEffect(() => {
+    getInitialShiftLogDetails();
+  }, [selectshifttable]);
+
 
   useEffect(() => {
     getMachineTaskData();
   }, [Machine]);
+
+  // console.log('selectshifttable In tabs4', selectshifttable);
+  
 
   return (
     <div>
@@ -136,6 +184,7 @@ export default function TabsFour({
               getShiftLogDetails={getShiftLogDetails}
               selectshifttable={selectshifttable}
               setShowTable={setShowTable}
+              initialShiftLogDetails={initialShiftLogDetails}
             />
           </Tab>
 

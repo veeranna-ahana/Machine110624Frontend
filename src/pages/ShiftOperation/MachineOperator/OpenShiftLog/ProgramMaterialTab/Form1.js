@@ -104,7 +104,7 @@ export default function Form1({
 };
 
 
-  console.log("selectedMtrlTable is",selectedMtrlTable);
+  // console.log("selectedMtrlTable is",selectedMtrlTable);
 
 
 const[newBOM,setNewBOM]=useState(false);

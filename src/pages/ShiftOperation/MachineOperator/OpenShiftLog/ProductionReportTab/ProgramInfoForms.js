@@ -34,6 +34,8 @@ export default function ProgramInfoForms({
       .then((response) => {
         // console.log(response.data);
         setHasBOM(response.data);
+        console.log('setHasBom', response.data);
+        
       });
     setOpenTable(false);
   };
@@ -72,6 +74,7 @@ export default function ProgramInfoForms({
       })
       .then((response) => {
         setService(response.data);
+        console.log('SetService', response.data);
       });
 
     axios
@@ -175,19 +178,20 @@ export default function ProgramInfoForms({
           return;
         }
 
-        // If QtyCut is less than Qty, show an error toast
-        if (
-          selectProductionReport.HasBOM === 0 &&
-          selectProductionReport.QtyCut < selectProductionReport.Qty
-        ) {
-          toast.error(
-            "Either mark the material allotted as used or rejected before changing status to completed",
-            {
-              position: toast.POSITION.TOP_CENTER,
-            }
-          );
-          return;
-        } else {
+        // // If QtyCut is less than Qty, show an error toast
+        // if (
+        //   selectProductionReport.HasBOM === 0 &&
+        //   selectProductionReport.QtyCut < selectProductionReport.Qty
+        // ) {
+        //   toast.error(
+        //     "Either mark the material allotted as used or rejected before changing status to completed",
+        //     {
+        //       position: toast.POSITION.TOP_CENTER,
+        //     }
+        //   );
+        //   return;
+        // }
+        else {
           setProgramComplete(true);
         }
       } catch (error) {
@@ -253,7 +257,7 @@ export default function ProgramInfoForms({
     return `${hoursString} ${minsString}`;
   };
 
-  console.log("selectProductionReport", selectProductionReport);
+  // console.log("selectProductionReport", selectProductionReport);
 
   return (
     <div>
