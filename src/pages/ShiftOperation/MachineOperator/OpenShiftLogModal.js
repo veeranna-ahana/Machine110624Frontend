@@ -85,6 +85,10 @@ export default function OpenShiftModal({
     } else {
       // console.log("excuted No Query")
       navigate("OpenShiftLog", { state: { data } });
+
+      console.log('requiredProgram', requiredProgram, 'and', 'selectshifttable', selectshifttable );
+      
+
       axios
         .post(baseURL + "/ShiftOperator/onClickYes", {
           requiredProgram,

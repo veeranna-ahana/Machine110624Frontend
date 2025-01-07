@@ -6,13 +6,12 @@
 // let API = "http://192.168.1.25:4013";
 // let API = "http://172.16.20.61:5016";
 // let API = "http://172.16.20.61:5006";
-let API = "http://localhost:5010";
+let API = process.env.REACT_APP_API_KEY;
 // let API = "http://localhost:4021";
 
 // let API = process.env.REACT_APP_API_KEY;
 
 export const endpoints = {
-  MenuUrlsAPI: `${API}/user/fetchMenuUrls`,
   getCustomers: `${API}/customers/allcustomers`,
   getCustCodeName: `${API}/customers/allcustcodename`,
   getCustomerDets: `${API}/customers/getcustomer`,
