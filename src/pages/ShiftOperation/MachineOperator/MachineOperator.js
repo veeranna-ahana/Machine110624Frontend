@@ -54,8 +54,13 @@ export default function MachineOperator() {
   const today = moment();
   let Date = today.format("YYYY-MM-DD HH:mm:ss");
 
+  console.log('Date with time', Date);
+  
+
   let array = Date.split(" ");
   let date = array[0];
+
+  console.log('Date', date);
 
   // Date Format  Change
   let date1 = date.split("-");
