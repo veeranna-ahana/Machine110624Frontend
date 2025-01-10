@@ -113,7 +113,9 @@ export default function OpenShiftModal({
           requiredProgram,
           selectshifttable,
         })
-        .then((response) => {});
+        .then((response) => {
+          console.log('OpenShiftLogModalonClickNoStoppage', response.data);
+        });
       setOpenmodal(false);
     } else {
       navigate("OpenShiftLog", { state: { data } });
@@ -122,7 +124,9 @@ export default function OpenShiftModal({
           requiredProgram,
           selectshifttable,
         })
-        .then((response) => {});
+        .then((response) => {
+          console.log('OpenShiftLogModalonClickNoWithProgramNo', response.data);
+        });
       setOpenmodal(false);
     }
   };
