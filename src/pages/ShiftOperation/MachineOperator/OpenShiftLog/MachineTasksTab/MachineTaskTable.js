@@ -43,7 +43,7 @@ export default function MachineTaskTable({
   const [open, setOpen] = useState(false);
   const [isDataDisplayed, setIsDataDisplayed] = useState(false);
   const [ErrorshowModal, setErrorshowModal] = useState(false);
-  const [selectedMachineTask,  setSelectedMachineTask] = useState([]);
+  const [selectedMachineTask, setSelectedMachineTask] = useState([]);
 
   const openModal = () => {
     if (isDataDisplayed && pgmNo != selectedProgram.NCProgramNo) {
@@ -130,8 +130,7 @@ export default function MachineTaskTable({
   const selectProgramFun = (item, index) => {
     let list = { ...item, index: index };
     setSelectedProgram(list);
-    setSelectedMachineTask(list)
-  
+
     axios
       .post(baseURL + "/ShiftOperator/checkhasBOM", {
         NCId: list?.Ncid,
@@ -139,18 +138,25 @@ export default function MachineTaskTable({
       .then((response) => {
         setHasBOM(response.data);
       });
+
+    setSelectedMachineTask(list);
   };
-  
+
   // UseEffect to update the selectedProgram when getMachinetaskdata changes
   useEffect(() => {
     if (getMachinetaskdata?.length > 0 && selectedProgram?.Ncid) {
       // Find the matching item in getMachinetaskdata
-      const updatedItem = getMachinetaskdata.find(item => item.Ncid === selectedProgram.Ncid);
-      
+      const updatedItem = getMachinetaskdata.find(
+        (item) => item.Ncid === selectedProgram.Ncid
+      );
+
       if (updatedItem) {
-        const list = { ...updatedItem, index: getMachinetaskdata.indexOf(updatedItem) };
-        setSelectedProgram(list); 
-  
+        const list = {
+          ...updatedItem,
+          index: getMachinetaskdata.indexOf(updatedItem),
+        };
+        setSelectedProgram(list);
+
         axios
           .post(baseURL + "/ShiftOperator/checkhasBOM", {
             NCId: list?.Ncid,
@@ -161,7 +167,7 @@ export default function MachineTaskTable({
       }
     }
   }, [getMachinetaskdata]);
-  
+
   useEffect(() => {
     if (getMachinetaskdata.length > 0 && !selectedProgram.NCProgramNo) {
       selectProgramFun(getMachinetaskdata[0], 0); // Select the first row
@@ -360,7 +366,7 @@ export default function MachineTaskTable({
               height: "auto",
             }}
           >
-            <div className="d-flex" style={{gap:'50px'}}>
+            <div className="d-flex" style={{ gap: "50px" }}>
               <div>
                 <label className="form-label ms-1">Program Info</label>
               </div>

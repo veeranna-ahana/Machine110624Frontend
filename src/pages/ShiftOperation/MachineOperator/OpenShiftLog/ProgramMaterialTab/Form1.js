@@ -215,6 +215,9 @@ const[newBOM,setNewBOM]=useState(false);
   }, []);
 
 
+  console.log('afterRefreshData', afterRefreshData);
+  
+
   return (
     <>
       <div>
