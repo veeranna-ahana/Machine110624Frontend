@@ -22,9 +22,7 @@ export default function ProgramInfoForms({
   const [complete, setComplete] = useState(false);
 
   const [selectProductionReport, setSelectProductionReport] = useState({});
-
   const selectProductionReportFun = (item, index) => {
-    setloadProgramButton(false);
     let list = { ...item, index: index };
     setSelectProductionReport(list);
     axios
@@ -34,8 +32,6 @@ export default function ProgramInfoForms({
       .then((response) => {
         // console.log(response.data);
         setHasBOM(response.data);
-        console.log('setHasBom', response.data);
-        
       });
     setOpenTable(false);
   };
@@ -61,22 +57,14 @@ export default function ProgramInfoForms({
   //Load Program
   const [rpTopData, setRptTopData] = useState([]);
   const [openTable, setOpenTable] = useState(false);
-  const [loadProgramButton, setloadProgramButton] = useState(false);
-
   const handleButtonClick = () => {
-    setloadProgramButton(true);
-
-    console.log("selectProductionReport.Ncid", selectProductionReport.Ncid);
-
     axios
       .post(baseURL + "/ShiftOperator/MachineTasksService", {
         NCId: selectProductionReport.Ncid,
       })
       .then((response) => {
         setService(response.data);
-        console.log('SetService', response.data);
       });
-
     axios
       .post(baseURL + "/ShiftOperator/getTableTopDeatails", {
         NCId: selectProductionReport?.Ncid,
@@ -102,12 +90,6 @@ export default function ProgramInfoForms({
         } else {
           setComplete(false);
         }
-
-        // if (count !== 0 && count === Qty) {
-        //   setComplete(true);
-        // } else {
-        //   setComplete(false);
-        // }
       });
     // console.log(selectProductionReport.Ncid, newNcid);
     if (selectProductionReport.NCProgramNo === formdata?.NCProgramNo) {
@@ -147,60 +129,51 @@ export default function ProgramInfoForms({
 
   //mark as Completed
   const programCompleteSubmit = async () => {
-    if (loadProgramButton) {
-      try {
-        const response = await axios.post(baseURL + "/ShiftOperator/getNCId", {
-          shiftSelected,
-        });
+    try {
+      const response = await axios.post(baseURL + "/ShiftOperator/getNCId", {
+        shiftSelected,
+      });
 
-        if (response.data && response.data.length > 0) {
-          const newNcid = response.data[0].Ncid;
+      if (response.data && response.data.length > 0) {
+        const newNcid = response.data[0].Ncid;
 
-          if (selectProductionReport.Ncid === newNcid) {
-            toast.error(
-              "Program Currently Being Processed, Use Current Program Window To Update Values",
-              {
-                position: toast.POSITION.TOP_CENTER,
-              }
-            );
-            return; // Exit the function early if program is currently being processed
-          }
-        }
-
-        // If matching object is found and QtyCut is less than Qty, show an error toast
-        if (complete === false) {
+        if (selectProductionReport.Ncid === newNcid) {
           toast.error(
-            "Either mark the material allotted as used or rejected before changing status to completed",
+            "Program Currently Being Processed, Use Current Program Window To Update Values",
             {
               position: toast.POSITION.TOP_CENTER,
             }
           );
-          return;
+          return; // Exit the function early if program is currently being processed
         }
-
-        // // If QtyCut is less than Qty, show an error toast
-        // if (
-        //   selectProductionReport.HasBOM === 0 &&
-        //   selectProductionReport.QtyCut < selectProductionReport.Qty
-        // ) {
-        //   toast.error(
-        //     "Either mark the material allotted as used or rejected before changing status to completed",
-        //     {
-        //       position: toast.POSITION.TOP_CENTER,
-        //     }
-        //   );
-        //   return;
-        // }
-        else {
-          setProgramComplete(true);
-        }
-      } catch (error) {
-        // Handle error if the request fails
       }
-    } else {
-      toast.error("Load the Program to Close", {
-        position: toast.POSITION.TOP_CENTER,
-      });
+
+      // If matching object is found and QtyCut is less than Qty, show an error toast
+      if (complete === false) {
+        toast.error(
+          "Either mark the material allotted as used or rejected before changing status to completed",
+          {
+            position: toast.POSITION.TOP_CENTER,
+          }
+        );
+        return;
+      }
+
+      // // If QtyCut is less than Qty, show an error toast
+      // if (selectProductionReport.QtyCut < selectProductionReport.Qty) {
+      //   toast.error(
+      //     "Either mark the material allotted as used or rejected before changing status to completed",
+      //     {
+      //       position: toast.POSITION.TOP_CENTER,
+      //     }
+      //   );
+      //   return;
+      // }
+      else {
+        setProgramComplete(true);
+      }
+    } catch (error) {
+      // Handle error if the request fails
     }
   };
 
@@ -256,8 +229,6 @@ export default function ProgramInfoForms({
 
     return `${hoursString} ${minsString}`;
   };
-
-  // console.log("selectProductionReport", selectProductionReport);
 
   return (
     <div>
