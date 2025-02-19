@@ -33,6 +33,7 @@ const AuthProvider = ({ children }) => {
   const [getMachinetaskdata, setMachinetaskdata] = useState([]);
   const [machineShiftStatus, setMachineShiftStatus] = useState([]);
   const [tubeCuttingModal,setTubeCuttingModal]=useState(false);
+  const [programCpltBtn,setprogramCpltBtn]=useState(false);
   const [servicedata, setService] = useState([]);
   const [RejectedReasonState, setRejectedReasonState] = useState({});
 
@@ -50,7 +51,7 @@ const AuthProvider = ({ children }) => {
         setShiftLogDetails,
         afterRefreshData,setAfterRefreshData,
         formdata,setFormData,
-        hasBOM,setHasBOM,machineTaskService, setMachineTaskDataService,afterloadService,setAfterloadService,shiftSelected,setShiftSelected,servicetopData,setServiceTopData,NcProgramId,setNcProgramId,pgmNo,setPgmNo,showTable, setShowTable,programPartsData, setProgramPartsData,partDetailsData, setPartDetailsData,timeDiffInMinutes, setTimeDiffInMinutes,getMachinetaskdata, setMachinetaskdata,machineShiftStatus, setMachineShiftStatus,tubeCuttingModal,setTubeCuttingModal,servicedata, setService,RejectedReasonState, setRejectedReasonState
+        hasBOM,setHasBOM,machineTaskService, setMachineTaskDataService,afterloadService,setAfterloadService,shiftSelected,setShiftSelected,servicetopData,setServiceTopData,NcProgramId,setNcProgramId,pgmNo,setPgmNo,showTable, setShowTable,programPartsData, setProgramPartsData,partDetailsData, setPartDetailsData,timeDiffInMinutes, setTimeDiffInMinutes,getMachinetaskdata, setMachinetaskdata,machineShiftStatus, setMachineShiftStatus,tubeCuttingModal,setTubeCuttingModal,servicedata, setService,RejectedReasonState, setRejectedReasonState, programCpltBtn, setprogramCpltBtn
       }}
     >
       {children}
