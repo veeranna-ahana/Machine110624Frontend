@@ -146,17 +146,52 @@ export default function ProgramPartsForm() {
   };
 
   //onClick of yes in save confirmation modal
+  // const onclickSaveYes = () => {
+  //   setConfirmModal(false);
+  //   const updatedProgramPartsData = programPartsData.map((item) => {
+  //     return {
+  //       ...item,
+  //       QtyCut: parseInt(item.QtyCut || 0) + parseInt(item.processnow || 0),
+  //     };
+  //   });
+
+  //   // Set the updated data in state
+  //   setProgramPartsData(updatedProgramPartsData);
+  //   axios
+  //     .post(baseURL + "/ShiftOperator/SaveprogramParts", {
+  //       programPartsData: updatedProgramPartsData,
+  //     })
+  //     .then((response) => {
+  //       toast.success("Data Saved Successfully", {
+  //         position: toast.POSITION.TOP_CENTER,
+  //       });
+  //       const resetProcessNowData = updatedProgramPartsData.map((item) => ({
+  //         ...item,
+  //         processnow: 0,
+  //       }));
+
+  //       // Set the data with processnow reset in state
+  //       setProgramPartsData(resetProcessNowData);
+  //       console.log('response from save',response);
+        
+  //     })
+  //     .catch((error) => {
+  //       console.log("error", error);
+  //     });
+  // };
   const onclickSaveYes = () => {
     setConfirmModal(false);
+  
     const updatedProgramPartsData = programPartsData.map((item) => {
       return {
         ...item,
         QtyCut: parseInt(item.QtyCut || 0) + parseInt(item.processnow || 0),
+        processnow: 1 // ✅ Ensure processnow is set to 1 before saving
       };
     });
-
-    // Set the updated data in state
+  
     setProgramPartsData(updatedProgramPartsData);
+  
     axios
       .post(baseURL + "/ShiftOperator/SaveprogramParts", {
         programPartsData: updatedProgramPartsData,
@@ -165,18 +200,20 @@ export default function ProgramPartsForm() {
         toast.success("Data Saved Successfully", {
           position: toast.POSITION.TOP_CENTER,
         });
+  
         const resetProcessNowData = updatedProgramPartsData.map((item) => ({
           ...item,
-          processnow: 0,
+          processnow: 0, // Reset after successful save
         }));
-
-        // Set the data with processnow reset in state
+  
         setProgramPartsData(resetProcessNowData);
+        console.log("response from save", response);
       })
       .catch((error) => {
         console.log("error", error);
       });
   };
+  
 
   // Sorting logic
   const [sortConfig, setSortConfig] = useState({ key: null, direction: null });

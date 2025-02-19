@@ -15,8 +15,15 @@ export default function ProgramInfoForms({
   getMachineTaskData,
   setMachinetaskdata,
 }) {
-  const { setHasBOM, shiftSelected, formdata, servicedata, setService } =
-    useGlobalContext();
+  const {
+    setHasBOM,
+    shiftSelected,
+    formdata,
+    servicedata,
+    setService,
+    programCpltBtn,
+    setprogramCpltBtn,
+  } = useGlobalContext();
   const [loadProgramInfo, setloadProgramInfo] = useState(false);
   const [programComplete, setProgramComplete] = useState(false);
   const [complete, setComplete] = useState(false);
@@ -25,6 +32,7 @@ export default function ProgramInfoForms({
   const selectProductionReportFun = (item, index) => {
     let list = { ...item, index: index };
     setSelectProductionReport(list);
+    setprogramCpltBtn(false);
     axios
       .post(baseURL + "/ShiftOperator/checkhasBOM", {
         NCId: list?.Ncid,
@@ -58,6 +66,7 @@ export default function ProgramInfoForms({
   const [rpTopData, setRptTopData] = useState([]);
   const [openTable, setOpenTable] = useState(false);
   const handleButtonClick = () => {
+    setprogramCpltBtn(true);
     axios
       .post(baseURL + "/ShiftOperator/MachineTasksService", {
         NCId: selectProductionReport.Ncid,
@@ -74,6 +83,8 @@ export default function ProgramInfoForms({
         const data = response.data;
         let count = 0;
         let Qty = 0;
+        let returnStatus = "";
+        let returnQty = 0;
 
         // Iterate through each object in the response data
         data.forEach((item) => {
@@ -81,13 +92,27 @@ export default function ProgramInfoForms({
           if (selectProductionReport.HasBOM === 1) {
             count = item.QtyUsed + item.QtyReturned;
             Qty = item?.QtyIssued;
+            returnStatus = item?.Status;
+            returnQty = item?.QtyReturned;
           }
+          console.log('Inside the loop for parts');
         });
 
+        console.log("returnQty", returnStatus);
+        console.log("returnQty", returnQty);
+
         // If count equals selectProductionReport.Qty, setComplete(true)
-        if (count === Qty) {
+
+        console.log('Inside the loop for sheets', response.data);
+
+        if (
+          (count === Qty && returnStatus === "Closed") ||
+          (count === Qty && returnQty === 0 && returnStatus === "Created")
+        ) {
+          console.log('Inside if statement for sheets');
           setComplete(true);
         } else {
+          console.log('Inside else for sheets');
           setComplete(false);
         }
       });
@@ -129,6 +154,13 @@ export default function ProgramInfoForms({
 
   //mark as Completed
   const programCompleteSubmit = async () => {
+    if (programCpltBtn === false) {
+      toast.error("Load the program to complete.", {
+        position: toast.POSITION.TOP_CENTER,
+      });
+      return;
+    }
+
     try {
       const response = await axios.post(baseURL + "/ShiftOperator/getNCId", {
         shiftSelected,
@@ -136,6 +168,7 @@ export default function ProgramInfoForms({
 
       if (response.data && response.data.length > 0) {
         const newNcid = response.data[0].Ncid;
+        console.log('Inside response.data', response.data);
 
         if (selectProductionReport.Ncid === newNcid) {
           toast.error(
@@ -150,6 +183,9 @@ export default function ProgramInfoForms({
 
       // If matching object is found and QtyCut is less than Qty, show an error toast
       if (complete === false) {
+        console.log('Inside complete === false for sheets');
+        console.log('Inside complete === false: response.data', response.data);
+        
         toast.error(
           "Either mark the material allotted as used or rejected before changing status to completed",
           {
